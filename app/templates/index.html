@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bike Demand Prediction - By Hassan</title>
+    <style>
+        /* Basic styling for the body to center the content on the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Styling for the main title */
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for the subtitle with instructions */
+        h2 {
+            color: #e74c3c;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 500px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for the form container */
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* Styling for form labels */
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        /* Styling for form inputs and dropdowns */
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Styling for the submit button */
+        button {
+            background-color: #2980b9;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        /* Button hover effect */
+        button:hover {
+            background-color: #3498db;
+        }
+
+        /* Modal styles to create the pop-up effect */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal content box styles */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* Style for the close button in the modal */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* Change color of close button on hover */
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bike Demand Prediction</h1>
+    <h2>
+      <br /><code>Boost your business with the power of machine learning</code>
+    </h2>
+
+    <!-- Form for inputting prediction parameters -->
+    <form id="predictionForm" action="/predict" method="POST">
+        <!-- Input for Temperature with validation -->
+        <label for="temp">Temperature (0.0 - 1.0):</label>
+        <input type="number" step="0.01" id="temp" name="temp" placeholder="e.g., 0.5" min="0" max="1" required>
+
+        <!-- Input for Humidity with validation -->
+        <label for="hum">Humidity (0.0 - 1.0):</label>
+        <input type="number" step="0.01" id="hum" name="hum" placeholder="e.g., 0.8" min="0" max="1" required>
+
+        <!-- Input for Windspeed with validation -->
+        <label for="windspeed">Windspeed (0.0 - 1.0):</label>
+        <input type="number" step="0.01" id="windspeed" name="windspeed" placeholder="e.g., 0.2" min="0" max="1" required>
+
+        <!-- Dropdown for selecting season -->
+        <label for="season">Season:</label>
+        <select id="season" name="season" required>
+            <option value="1">Spring</option>
+            <option value="2">Summer</option>
+            <option value="3">Fall</option>
+            <option value="4">Winter</option>
+        </select>
+
+        <!-- Dropdown for selecting year -->
+        <label for="yr">Year:</label>
+        <select id="yr" name="yr" required>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+        </select>
+
+        <!-- Dropdown for selecting month -->
+        <label for="mnth">Month:</label>
+        <select id="mnth" name="mnth" required>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+        </select>
+
+        <!-- Dropdown for selecting if it's a holiday -->
+        <label for="holiday">Holiday:</label>
+        <select id="holiday" name="holiday" required>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </select>
+
+        <!-- Dropdown for selecting the day of the week -->
+        <label for="weekday">Weekday:</label>
+        <select id="weekday" name="weekday" required>
+            <option value="0">Sunday</option>
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+            <option value="6">Saturday</option>
+        </select>
+
+        <!-- Dropdown for selecting if it's a working day -->
+        <label for="workingday">Working Day:</label>
+        <select id="workingday" name="workingday" required>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </select>
+
+        <!-- Dropdown for selecting the weather situation -->
+        <label for="weathersit">Weather Situation:</label>
+        <select id="weathersit" name="weathersit" required>
+            <option value="1">Clear, Few clouds, Partly cloudy</option>
+            <option value="2">Mist + Cloudy, Mist + Broken clouds</option>
+            <option value="3">Light Snow, Light Rain + Thunderstorm</option>
+            <option value="4">Heavy Rain, Ice Pallets, Snow + Fog</option>
+        </select>
+
+        <!-- Submit button for the form -->
+        <button type="submit">Predict</button>
+    </form>
+
+    <h2>
+      <br /><code>Powered by: Flask, NumPy, Joblib, and Scikit-learn (SVM, Random Forest, Gradient Boosting, Linear Regression).</code>
+    </h2>
+    <h2> Designed & Developed by: Hassan Ya'u Hamisu</h2>
+    <!-- The Modal that shows the prediction result -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="resultText"></h2>
+        </div>
+    </div>
+
+    <script>
+        // Event listener to handle form submission
+        document.getElementById('predictionForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting in the traditional way
+
+            // Validate the range for Temperature, Humidity, and Windspeed
+            const temp = parseFloat(document.getElementById('temp').value);
+            const hum = parseFloat(document.getElementById('hum').value);
+            const windspeed = parseFloat(document.getElementById('windspeed').value);
+
+            if (temp < 0 || temp > 1 || hum < 0 || hum > 1 || windspeed < 0 || windspeed > 1) {
+                alert("Temperature, Humidity, and Windspeed values must be between 0.0 and 1.0.");
+                return;
+            }
+
+            // Create a FormData object from the form inputs
+            const formData = new FormData(this);
+
+            // Send the form data to the server using fetch
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                // Check if the response is successful
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json(); // Parse the response as JSON
+            })
+            .then(data => {
+                // Update the modal with the prediction text
+                document.getElementById('resultText').textContent = data.prediction_text;
+                document.getElementById('resultModal').style.display = 'block'; // Show the modal
+            })
+            .catch(error => {
+                // Log any errors that occur during the fetch operation
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        });
+
+        // Modal close functionality
+        var modal = document.getElementById('resultModal');
+        var span = document.getElementsByClassName('close')[0];
+
+        // Close the modal when the user clicks on the close button
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Close the modal when the user clicks anywhere outside of the modal
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+    {% if prediction_text %}
+    <script>
+        // If there is a prediction text from the server, display it in the modal
+        document.getElementById('resultText').textContent = "{{ prediction_text }}";
+        document.getElementById('resultModal').style.display = 'block';
+    </script>
+    {% endif %}
+</body>
+</html>

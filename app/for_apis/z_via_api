@@ -1,0 +1,16 @@
+# You can make predictions by sending a POST request to the /predict endpoint. For example, you could use curl or Postman to send the following JSON payload:
+
+{
+    "season": 3,
+    "yr": 1,
+    "mnth": 7,
+    "hr": 12,
+    "holiday": 0,
+    "weekday": 4,
+    "workingday": 1,
+    "weathersit": 1,
+    "temp": 0.8,
+    "atemp": 0.757,
+    "hum": 0.55,
+    "windspeed": 0.2239
+}
